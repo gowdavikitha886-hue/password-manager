@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>VaultKeep – Password Manager (Cybersecurity Project)</title>
+<style>
+:root{--bg:#eef2f4;--ink:#14202b;--mut:#5b6b78;--card:#fff;--ac:#0e7c86;--acd:#0a5c64;--acl:#e3f1f2;--bad:#b3261e;--ln:#d5dde2;--bt:#fff;--sh:0 1px 2px #0001,0 8px 22px #14202b0f}
+[data-theme=dark]{--bg:#0d151c;--ink:#e6eef3;--mut:#93a4b0;--card:#162330;--ac:#2bb3bf;--acd:#58cdd7;--acl:#12313a;--bad:#ff8a80;--ln:#26384a;--bt:#04161a;--sh:none}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 "Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .2s,color .2s}
+h1,h2,h3{margin:0 0 .5rem;line-height:1.25}.mut{color:var(--mut)}button,input,select,textarea{font:inherit}
+input,select,textarea{width:100%;padding:.6rem .75rem;border:1px solid var(--ln);border-radius:8px;background:var(--card);color:var(--ink)}
+input:focus,select:focus,textarea:focus{border-color:var(--ac)}label{display:block;margin:.8rem 0 .25rem;font-weight:600}
+button{cursor:pointer;border:1px solid var(--ac);background:var(--ac);color:var(--bt);padding:.55rem 1rem;border-radius:8px;font-weight:600;transition:transform .08s,background .15s}
+button:hover{background:var(--acd)}button:active{transform:scale(.97)}button:disabled{opacity:.6;cursor:wait}
+button.g{background:transparent;color:var(--ac)}button.g:hover{background:var(--acl)}button.d{background:var(--bad);border-color:var(--bad);color:#fff}button.sm{padding:.25rem .7rem;font-size:13px}
+:focus-visible{outline:3px solid #f2a900;outline-offset:2px}
+.split{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.hero{background:linear-gradient(150deg,#0b1a26,#0e5560);color:#eaf6f8;padding:4rem 3rem;display:flex;flex-direction:column;justify-content:center}
+.hero h1{font-size:2.3rem;max-width:15ch}.hero ul{padding:0;list-style:none;margin-top:1.5rem}.hero li{margin:.6rem 0;padding-left:1.8rem;position:relative}
+.hero li:before{content:"✓";position:absolute;left:0;color:#7fe0d0;font-weight:700}.logo{font-size:3rem;margin-bottom:1rem}
+.auth{align-self:center;justify-self:center;width:min(420px,92%);padding:2rem 0}
+.tabs{display:flex;background:var(--acl);border-radius:10px;padding:4px;gap:4px;margin:1rem 0}.tabs button{flex:1;border:0}.tabs button.g{color:var(--acd)}
+.note{padding:.7rem .9rem;border-radius:8px;background:#fff4d6;color:#4a3500;margin:.8rem 0;font-size:14px}.err{color:var(--bad);min-height:1.4em;margin-top:.5rem;font-weight:600}
+.shell{display:flex;min-height:100vh}nav{width:220px;background:#0f1c27;color:#fff;padding:1.2rem .8rem;flex-shrink:0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:2px}
+nav h2{font-size:1.25rem;padding:0 .6rem;margin-bottom:1rem}nav button{text-align:left;background:none;border:0;color:#b9cbd6;padding:.6rem .8rem;font-weight:500;border-left:3px solid transparent;border-radius:6px}
+nav button.on{background:#1b3040;color:#fff;border-left-color:#4fd1c5}nav button:hover{background:#1b3040;color:#fff}nav .sp{flex:1}
+main{flex:1;padding:2rem;min-width:0;max-width:1000px}main>div{animation:in .25s ease}@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:1.1rem;margin-bottom:1rem;box-shadow:var(--sh)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem;margin-bottom:1rem}.grid .card{margin:0}.stat b{font-size:1.9rem;display:block}
+.row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}.row>.grow,.grow{flex:1;min-width:140px}
+.item{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;padding:.9rem 0;border-bottom:1px solid var(--ln)}.item:last-child{border:0}
+.av{width:44px;height:44px;border-radius:12px;color:#fff;display:grid;place-items:center;font-weight:700;font-size:1.2rem;flex-shrink:0}
+.tag{font-size:12px;padding:2px 9px;border-radius:99px;background:var(--acl);color:var(--acd);font-weight:600}.tag.r{background:#fde7e5;color:var(--bad)}
+.tag[data-c=Banking]{background:#e4f0ff;color:#1d5fb4}.tag[data-c=Social]{background:#f6e7ff;color:#7a2fa8}.tag[data-c=Work]{background:#fff0d9;color:#99600a}.tag[data-c=Shopping]{background:#e5f7e7;color:#25702c}.tag[data-c=Education]{background:#ffe8ef;color:#a3234f}
+.bar{height:8px;background:var(--ln);border-radius:4px;overflow:hidden;margin-top:.3rem}.bar i{display:block;height:100%;width:0;transition:width .25s}
+.ringcard{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}.ring{width:130px;height:130px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--ln) 0);display:grid;place-items:center}
+.ring span{width:98px;height:98px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:2rem;font-weight:700}
+.empty{text-align:center;padding:2.5rem 1rem}.empty .big{font-size:3rem}.mono{font-family:Consolas,monospace;word-break:break-all}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:.5rem;border-bottom:1px solid var(--ln)}
+dialog{border:1px solid var(--ln);border-radius:14px;padding:1.4rem;width:min(480px,94vw);background:var(--card);color:var(--ink);animation:in .2s}dialog::backdrop{background:#0008;backdrop-filter:blur(2px)}
+#toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:#14202b;color:#fff;padding:.7rem 1.2rem;border-radius:99px;display:none;box-shadow:0 6px 20px #0005;z-index:9}
+pre{background:#0f1c27;color:#d7e6ee;padding:.9rem;border-radius:8px;overflow:auto}
+@media(max-width:800px){.split{grid-template-columns:1fr}.hero{padding:2rem 1.5rem}.hero h1{font-size:1.6rem}.shell{flex-direction:column}nav{width:100%;height:auto;position:static;flex-direction:row;overflow-x:auto;padding:.6rem}nav h2,nav .sp{display:none}nav button{white-space:nowrap;border-left:0;border-bottom:3px solid transparent}nav button.on{border-bottom-color:#4fd1c5}main{padding:1rem}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div><div id="toast" role="status"></div>
+<script>
+"use strict";
+/* ============ Crypto helpers (Web Crypto API – no hand-written crypto) ============ */
+const te=new TextEncoder(),td=new TextDecoder(),ITER=600000;
+const b64=u=>{u=new Uint8Array(u);let s="";for(let i=0;i<u.length;i++)s+=String.fromCharCode(u[i]);return btoa(s)};
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const rnd=n=>crypto.getRandomValues(new Uint8Array(n));
+async function derive(pw,salt,iter){ // PBKDF2-SHA256 -> AES-256 key (non-extractable, never stored)
+  const m=await crypto.subtle.importKey("raw",te.encode(pw),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:iter,hash:"SHA-256"},m,{name:"AES-GCM",length:256},false,["encrypt","decrypt"]);
+}
+async function encrypt(key,obj){const iv=rnd(12); // fresh random nonce every time
+  const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,te.encode(JSON.stringify(obj)));return{iv:b64(iv),ct:b64(ct)}}
+async function decrypt(key,b){ // throws if key wrong or data tampered (GCM auth tag)
+  return JSON.parse(td.decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(b.iv)},key,unb64(b.ct))))}
+function rint(n){const lim=Math.floor(2**32/n)*n;let x;do{x=crypto.getRandomValues(new Uint32Array(1))[0]}while(x>=lim);return x%n}
+function gen(len,sets){const all=sets.join("");if(!all)return"";const out=sets.map(s=>s[rint(s.length)]);
+  while(out.length<len)out.push(all[rint(all.length)]);for(let i=out.length-1;i>0;i--){const j=rint(i+1);[out[i],out[j]]=[out[j],out[i]]}return out.slice(0,len).join("")}
+const SETS={up:"ABCDEFGHJKLMNPQRSTUVWXYZ",lo:"abcdefghijkmnopqrstuvwxyz",nu:"23456789",sp:"!@#$%^&*()-_=+[]{};:,.?"};
+const COMMON=["password","123456","qwerty","letmein","admin","welcome","iloveyou","abc123","monkey","dragon"];
+function strength(p){let s=0;if(!p)return{n:0,l:"Empty"};
+  if(p.length>=8)s++;if(p.length>=12)s++;if(p.length>=16)s++;
+  if(/[a-z]/.test(p)&&/[A-Z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^A-Za-z0-9]/.test(p))s++;
+  if(/(.)\1{2,}/.test(p))s--;if(/(0123|1234|2345|3456|abcd|bcde|qwer|asdf)/i.test(p))s--;
+  if(COMMON.some(c=>p.toLowerCase().includes(c)))s-=3;
+  const n=Math.max(0,Math.min(4,Math.round(s*4/6)));return{n,l:["Very Weak","Weak","Medium","Strong","Very Strong"][n]}}
+/* ============ Storage (only ciphertext + salt is saved) ============ */
+const users=()=>JSON.parse(localStorage.getItem("pm_users")||"{}"),setUsers=u=>localStorage.setItem("pm_users",JSON.stringify(u));
+const S={user:null,key:null,data:null,notice:"",tab:"vault",timer:null};
+async function save(){const u=users();u[S.user].blob=await encrypt(S.key,S.data);setUsers(u)}
+function log(e){S.data.log.unshift({t:Date.now(),e});S.data.log.length=Math.min(S.data.log.length,200)}
+/* ============ Auth ============ */
+async function register(name,pw,pw2){
+  if(!/^[\w.-]{3,30}$/.test(name))throw Error("Username: 3–30 letters, numbers, . _ -");
+  if(pw.length<12||strength(pw).n<2)throw Error("Master password must be 12+ characters and at least Medium strength.");
+  if(pw!==pw2)throw Error("Passwords do not match.");
+  const U=users();if(U[name])throw Error("Username already taken.");
+  const salt=rnd(16),key=await derive(pw,salt,ITER),data={items:[],log:[],settings:{lock:10}};
+  U[name]={salt:b64(salt),iter:ITER,fails:0,until:0,failTimes:[],blob:await encrypt(key,data)};setUsers(U);
+}
+async function login(name,pw){
+  const U=users(),u=U[name],now=Date.now(),GEN="Incorrect username or master password.";
+  if(u&&u.until>now)throw Error(`Too many failed attempts. Try again in ${Math.ceil((u.until-now)/1000)}s.`);
+  if(!u){await derive(pw,rnd(16),ITER);throw Error(GEN)} // same timing whether or not account exists
+  let key,data;
+  try{key=await derive(pw,unb64(u.salt),u.iter);data=await decrypt(key,u.blob)}
+  catch{u.fails=(u.fails||0)+1;u.failTimes=[...(u.failTimes||[]),now].slice(-20);
+    if(u.fails>=5)u.until=now+Math.min(900,30*2**(u.fails-5))*1000;setUsers(U);throw Error(GEN)}
+  u.fails=0;u.until=0;setUsers(U);Object.assign(S,{user:name,key,data,notice:"",tab:"vault"});log("Successful login");await save();arm();view();
+}
+function lock(msg){if(S.user&&S.data){log("Vault locked");save().catch(()=>{})}
+  Object.assign(S,{user:null,key:null,data:null,notice:msg||""});clearTimeout(S.timer);view()}
+function arm(){clearTimeout(S.timer);const m=S.data&&S.data.settings.lock;if(S.user&&m)S.timer=setTimeout(()=>lock("Vault locked. Please authenticate again."),m*60000)}
+["click","keydown","mousemove","touchstart"].forEach(e=>addEventListener(e,()=>S.user&&arm(),{passive:true}));
+/* ============ UI helpers ============ */
+function h(t,p,...k){const e=document.createElement(t);for(const[a,v]of Object.entries(p||{})){if(a.startsWith("on"))e.addEventListener(a.slice(2),v);else if(a==="class")e.className=v;else e.setAttribute(a,v)}
+  k.flat().forEach(c=>e.append(c instanceof Node?c:document.createTextNode(c??"")));return e}
+const $=(s,r=document)=>r.querySelector(s);
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display="none",2500)}
+function meter(){const b=h("i"),l=h("small");const w=h("div",{},h("div",{class:"bar"},b),l);
+  w.set=p=>{const s=strength(p);b.style.width=(s.n+1)*20+"%";b.style.background=["#b3261e","#d9531e","#b26a00","#5a9a2f","#2e7d32"][s.n];l.textContent=p?s.l:""};return w}
+async function copy(t){await navigator.clipboard.writeText(t);toast("Copied – clipboard clears in 20s");setTimeout(()=>navigator.clipboard.writeText("").catch(()=>{}),20000)}
+const fmt=t=>new Date(t).toLocaleString([], {dateStyle:"medium",timeStyle:"short"});
+/* ============ Auth view ============ */
+function eye(i){const b=h("button",{type:"button",class:"g sm","aria-label":"Show or hide password",onclick:()=>{i.type=i.type==="password"?"text":"password";b.textContent=i.type==="password"?"Show":"Hide"}},"Show");return h("div",{class:"row"},h("div",{class:"grow"},i),b)}
+function authView(a){let mode="login";const box=h("div",{class:"auth"});a.append(h("div",{class:"split"},h("section",{class:"hero"},h("div",{class:"logo"},"🔐"),h("h1",{},"Your passwords, locked on your device."),h("ul",{},h("li",{},"AES-256-GCM encryption"),h("li",{},"PBKDF2 key derivation with a unique salt"),h("li",{},"Nothing ever leaves your browser"))),box));
+  const draw=()=>{box.replaceChildren(h("h2",{},"Welcome to VaultKeep"),h("p",{class:"mut"},"Log in or create a vault. Everything is encrypted in your browser."));
+    if(S.notice)box.append(h("div",{class:"note",role:"alert"},S.notice));
+    box.append(h("div",{class:"tabs"},h("button",{class:mode==="login"?"":"g",onclick:()=>{mode="login";S.notice="";draw()}},"Log in"),h("button",{class:mode==="register"?"":"g",onclick:()=>{mode="register";S.notice="";draw()}},"Register")));
+    const un=h("input",{id:"un",autocomplete:"username",required:""}),pw=h("input",{id:"pw",type:"password",autocomplete:mode==="login"?"current-password":"new-password",required:""}),pw2=h("input",{id:"pw2",type:"password",autocomplete:"new-password"}),m=meter(),err=h("div",{class:"err",role:"alert"}),btn=h("button",{type:"submit"},mode==="login"?"Unlock vault":"Create vault");
+    pw.addEventListener("input",()=>m.set(pw.value));
+    const f=h("form",{onsubmit:async e=>{e.preventDefault();btn.disabled=true;btn.textContent="Working…";err.textContent="";
+      try{if(mode==="register"){await register(un.value.trim(),pw.value,pw2.value);toast("Account created. Please log in.");mode="login";S.notice="";draw()}else await login(un.value.trim(),pw.value)}
+      catch(x){err.textContent=x.message;btn.disabled=false;btn.textContent=mode==="login"?"Unlock vault":"Create vault"}}},
+      h("label",{for:"un"},"Username"),un,h("label",{for:"pw"},"Master password"),eye(pw),mode==="register"?[m,h("label",{for:"pw2"},"Confirm master password"),pw2,h("div",{class:"note"},"If you forget your master password, your vault cannot be recovered. There is no backdoor – that is the point of zero-knowledge design.")]:[],h("br"),btn,err);
+    box.append(f)};draw()}
+/* ============ App views ============ */
+const NAV=[["vault","🗝 Vault"],["gen","🎲 Generator"],["sec","🛡 Security"],["audit","📜 Audit log"],["set","⚙ Settings"],["learn","🎓 Concepts"]];
+function appView(a){const main=h("main");
+  const nav=h("nav",{},h("h2",{},"VaultKeep"),NAV.map(([k,l])=>h("button",{class:S.tab===k?"on":"",onclick:()=>{S.tab=k;view()}},l)),h("div",{class:"sp"}),h("button",{onclick:toggleTheme},"🌗 Theme"),h("button",{onclick:()=>{log("Logout");save().then(()=>lock("You have been logged out."))}},"🚪 Log out"));
+  main.append(({vault:vaultView,gen:genView,sec:secView,audit:auditView,set:setView,learn:learnView})[S.tab]());a.append(h("div",{class:"shell"},nav,main))}
+function itemDialog(it){const d=h("dialog");const v=it||{name:"",url:"",user:"",pass:"",cat:"Other",notes:""};
+  const f={};["name","url","user","pass"].forEach(k=>f[k]=h("input",{value:v[k],id:"f"+k,autocomplete:"off"}));f.pass.type="password";
+  f.cat=h("select",{id:"fcat"},["Social","Banking","Education","Work","Shopping","Other"].map(c=>h("option",{value:c,...(c===v.cat?{selected:""}:{})},c)));
+  f.notes=h("textarea",{id:"fnotes",rows:3});f.notes.value=v.notes;const m=meter(),err=h("div",{class:"err"});m.set(v.pass);f.pass.addEventListener("input",()=>m.set(f.pass.value));
+  const L=(t,k)=>[h("label",{for:"f"+k},t),f[k]];
+  d.append(h("h3",{},it?"Edit credential":"Add credential"),h("form",{method:"dialog",onsubmit:async e=>{e.preventDefault();
+    if(!f.name.value.trim()||!f.pass.value){err.textContent="Name and password are required.";return}
+    if(f.url.value&&!/^https?:\/\//i.test(f.url.value)){err.textContent="URL must start with http:// or https://";return}
+    const now=Date.now(),n={id:v.id||crypto.randomUUID(),name:f.name.value.trim(),url:f.url.value.trim(),user:f.user.value,pass:f.pass.value,cat:f.cat.value,notes:f.notes.value,created:v.created||now,pwChanged:(it&&it.pass===f.pass.value)?it.pwChanged:now,updated:now};
+    if(it)S.data.items[S.data.items.findIndex(x=>x.id===it.id)]=n;else S.data.items.push(n);
+    log(it?"Credential updated":"Credential added");await save();d.close();d.remove();toast("Saved (encrypted)");view()}},
+    L("Website / app","name"),L("URL","url"),L("Username / email","user"),h("label",{for:"fpass"},"Password"),
+    h("div",{class:"row"},h("div",{class:"grow"},f.pass),h("button",{type:"button",class:"g sm",onclick:()=>f.pass.type=f.pass.type==="password"?"text":"password"},"Show"),h("button",{type:"button",class:"g sm",onclick:()=>{f.pass.value=gen(18,Object.values(SETS));m.set(f.pass.value)}},"Generate")),m,
+    h("label",{for:"fcat"},"Category"),f.cat,h("label",{for:"fnotes"},"Notes"),f.notes,err,h("br"),
+    h("div",{class:"row"},h("button",{type:"submit"},"Save"),h("button",{type:"button",class:"g",onclick:()=>{d.close();d.remove()}},"Cancel"))));
+  document.body.append(d);d.showModal()}
+function confirmDel(it){const d=h("dialog",{},h("h3",{},"Delete credential?"),h("p",{},`Are you sure you want to delete this credential (${it.name})? This cannot be undone.`),
+  h("div",{class:"row"},h("button",{class:"d",onclick:async()=>{S.data.items=S.data.items.filter(x=>x.id!==it.id);log("Credential deleted");await save();d.close();d.remove();toast("Deleted");view()}},"Delete"),h("button",{class:"g",onclick:()=>{d.close();d.remove()}},"Cancel")));
+  document.body.append(d);d.showModal()}
+const reuse=()=>{const c={};S.data.items.forEach(i=>c[i.pass]=(c[i.pass]||0)+1);return c};
+function avStyle(n){let x=0;for(const c of n)x=(x*31+c.charCodeAt(0))%360;return`background:hsl(${x} 55% 40%)`}
+function toggleTheme(){const t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;localStorage.setItem("pm_theme",t)}
+function vaultView(){const w=h("div"),q=h("input",{placeholder:"Search name, username or category",type:"search","aria-label":"Search"}),cat=h("select",{"aria-label":"Category filter"},["All","Social","Banking","Education","Work","Shopping","Other"].map(c=>h("option",{},c))),list=h("div",{class:"card"});
+  const draw=()=>{list.replaceChildren();const r=reuse(),s=q.value.toLowerCase();
+    const its=S.data.items.filter(i=>(cat.value==="All"||i.cat===cat.value)&&[i.name,i.user,i.cat].join(" ").toLowerCase().includes(s));
+    if(!its.length){list.append(h("div",{class:"empty"},h("div",{class:"big"},"🗄"),h("h3",{},S.data.items.length?"No matches":"Your vault is empty"),h("p",{class:"mut"},S.data.items.length?"Try a different search or category.":"Add your first credential to start protecting your accounts."),S.data.items.length?"":h("button",{onclick:()=>itemDialog()},"+ Add credential")));return}
+    its.forEach(i=>{const pw=h("span",{class:"mono"},"••••••••••••");let shown=false;
+      list.append(h("div",{class:"item"},h("div",{class:"av",style:avStyle(i.name)},i.name[0].toUpperCase()),h("div",{class:"grow"},h("b",{},i.name)," ",h("span",{class:"tag","data-c":i.cat},i.cat)," ",r[i.pass]>1?h("span",{class:"tag r"},`⚠ Reused ×${r[i.pass]}`):"",h("div",{},i.user),h("div",{},pw),i.notes?h("small",{},i.notes):""),
+        h("div",{class:"row"},h("button",{class:"g sm",onclick:e=>{shown=!shown;pw.textContent=shown?i.pass:"••••••••••••";e.target.textContent=shown?"Hide":"Show"}},"Show"),h("button",{class:"g sm",onclick:()=>copy(i.pass)},"Copy"),h("button",{class:"g sm",onclick:()=>itemDialog(i)},"Edit"),h("button",{class:"d sm",onclick:()=>confirmDel(i)},"Delete"))))})};
+  q.addEventListener("input",draw);cat.addEventListener("change",draw);
+  w.append(h("h1",{},"Password vault"),h("div",{class:"row card"},h("div",{class:"grow"},q),cat,h("button",{onclick:()=>itemDialog()},"+ Add credential")),list);draw();return w}
+function genView(){const w=h("div"),out=h("div",{class:"mono card",style:"font-size:1.2rem"}),len=h("input",{type:"range",min:8,max:64,value:16,"aria-label":"Length"}),ll=h("b",{},"16"),m=meter();
+  const cb={};const row=h("div",{class:"row"});[["up","Uppercase"],["lo","Lowercase"],["nu","Numbers"],["sp","Special"]].forEach(([k,l])=>{cb[k]=h("input",{type:"checkbox",checked:"",style:"width:auto"});row.append(h("label",{style:"margin:0"},cb[k]," "+l))});
+  const go=()=>{ll.textContent=len.value;out.textContent=gen(+len.value,Object.keys(cb).filter(k=>cb[k].checked).map(k=>SETS[k]))||"Select at least one option";m.set(out.textContent)};
+  len.addEventListener("input",go);Object.values(cb).forEach(c=>c.addEventListener("change",go));go();
+  w.append(h("h1",{},"Password generator"),h("div",{class:"card"},h("label",{},"Length: ",ll),len,row,h("br"),out,m,h("div",{class:"row"},h("button",{onclick:go},"Generate"),h("button",{class:"g",onclick:()=>copy(out.textContent)},"Copy"),h("button",{class:"g",onclick:()=>{itemDialog({name:"",url:"",user:"",pass:out.textContent,cat:"Other",notes:""})}},"Use in new credential")),h("p",{},"Uses crypto.getRandomValues with rejection sampling (no Math.random).")));return w}
+function secView(){const it=S.data.items,r=reuse(),st=it.map(i=>strength(i.pass).n),strong=st.filter(n=>n>=3).length,weak=st.filter(n=>n<=1).length,reused=it.filter(i=>r[i.pass]>1).length,old=it.filter(i=>Date.now()-i.pwChanged>90*864e5).length;
+  const score=it.length?Math.max(0,Math.round(100-100*(weak+reused*.7+old*.4)/it.length)):100;
+  const card=(n,l)=>h("div",{class:"card stat"},h("b",{},n),l);
+  return h("div",{},h("h1",{},"Security dashboard"),h("div",{class:"card ringcard"},h("div",{class:"ring",style:`--p:${score};--c:${score>70?"#2e9d4f":score>40?"#d98a00":"#d64538"}`},h("span",{},String(score))),h("div",{},h("h2",{},"Security score"),h("p",{class:"mut"},score>70?"Looking healthy. Keep passwords unique and rotate old ones.":"Fix weak, reused and old passwords to raise your score."))),
+    h("div",{class:"grid"},card(it.length,"Total credentials"),card(strong,"Strong"),card(weak,"Weak"),card(reused,"Reused"),card(old,"Older than 90 days")),
+    h("div",{class:"card"},h("h3",{},"Recent events"),...S.data.log.slice(0,5).map(l=>h("div",{},fmt(l.t)+" – "+l.e))))}
+function auditView(){const fails=(users()[S.user].failTimes||[]).map(t=>({t,e:"Failed login attempt"})),all=[...S.data.log,...fails].sort((a,b)=>b.t-a.t);
+  return h("div",{},h("h1",{},"Security audit log"),h("div",{class:"card"},h("table",{},h("tr",{},h("th",{},"Time"),h("th",{},"Event")),...all.map(l=>h("tr",{},h("td",{},fmt(l.t)),h("td",{},l.e)))),h("p",{},"Passwords, keys and master passwords are never logged.")))}
+function setView(){const sel=h("select",{id:"lk"},[[5,"5 minutes"],[10,"10 minutes"],[15,"15 minutes"],[30,"30 minutes"],[0,"Never"]].map(([v,l])=>h("option",{value:v,...(+v===S.data.settings.lock?{selected:""}:{})},l)));
+  sel.addEventListener("change",async()=>{S.data.settings.lock=+sel.value;await save();arm();toast("Auto-lock updated")});
+  const c=h("input",{type:"password",id:"cp",autocomplete:"current-password"}),n=h("input",{type:"password",id:"np",autocomplete:"new-password"}),n2=h("input",{type:"password",id:"np2",autocomplete:"new-password"}),m=meter(),err=h("div",{class:"err",role:"alert"});n.addEventListener("input",()=>m.set(n.value));
+  return h("div",{},h("h1",{},"Settings"),h("div",{class:"card"},h("label",{for:"lk"},"Auto-lock after inactivity"),sel),
+    h("form",{class:"card",onsubmit:async e=>{e.preventDefault();err.textContent="";const U=users(),u=U[S.user];
+      try{await decrypt(await derive(c.value,unb64(u.salt),u.iter),u.blob)}catch{err.textContent="Current master password is incorrect.";return}
+      if(n.value.length<12||strength(n.value).n<2){err.textContent="New password must be 12+ characters and at least Medium strength.";return}
+      if(n.value!==n2.value){err.textContent="New passwords do not match.";return}
+      const salt=rnd(16);S.key=await derive(n.value,salt,ITER);u.salt=b64(salt);u.iter=ITER;log("Master password changed");u.blob=await encrypt(S.key,S.data);setUsers(U);e.target.reset();m.set("");toast("Master password changed; vault re-encrypted")}},
+      h("h3",{},"Change master password"),h("label",{for:"cp"},"Current"),c,h("label",{for:"np"},"New"),n,m,h("label",{for:"np2"},"Confirm new"),n2,err,h("br"),h("button",{},"Change password")))}
+function learnView(){const T=[["Authentication","Proves you are the real owner. Here: you must decrypt the vault with the correct master password. Failed attempts trigger growing delays (brute-force protection)."],["Hashing / key derivation","PBKDF2-SHA256 with 600,000 iterations and a unique random salt stretches your master password into a 256-bit key, making guessing slow. The key is never stored."],["Encryption","AES-256-GCM scrambles all vault data with that key. A new random 96-bit nonce is used for every save."],["Authenticated encryption","GCM adds a tag. If the data was changed or the key is wrong, decryption fails instead of returning garbage."],["Secure storage","localStorage holds only salt + ciphertext. Plaintext exists in memory only while unlocked and is cleared on lock."],["Authorization","Each user has a separate encrypted vault; one user's key cannot open another's data."],["Audit logging","Security events are recorded (never secrets)."]];
+  return h("div",{},h("h1",{},"Cybersecurity concepts demonstrated"),h("pre",{},"Master password → PBKDF2 (salt) → AES key → AES-GCM encrypt → ciphertext in storage"),...T.map(([a,b])=>h("div",{class:"card"},h("h3",{},a),h("p",{},b))),
+    h("div",{class:"note"},"Limitations: this is a learning project. A browser-only app cannot defend against malware or XSS on the device, and localStorage can be cleared. Use a vetted password manager for real accounts."))}
+function view(){const a=$("#app");a.replaceChildren();S.user?appView(a):authView(a)}
+document.documentElement.dataset.theme=localStorage.getItem("pm_theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+view();
+</script>
+</body>
+</html>
