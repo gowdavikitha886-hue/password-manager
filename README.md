@@ -75,7 +75,7 @@ python -m http.server 8080
 
 ### Deploy
 
-The project is deployed to GitHub Pages from the `main` branch by the workflow in `.github/workflows/pages.yml`. On the repository's **Settings → Pages**, set the build and deployment source to **GitHub Actions**. Each push to `main` then publishes `index.html` at:
+The project is deployed to GitHub Pages from the `main` branch by the workflow in `.github/workflows/pages.yml`, which attempts to enable Pages automatically. If automatic enablement is unavailable, set the repository's **Settings → Pages** build and deployment source to **GitHub Actions**. Each push to `main` then publishes `index.html` at:
 
 https://gowdavikitha886-hue.github.io/password-manager/
 
